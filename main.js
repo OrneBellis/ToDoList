@@ -20,7 +20,6 @@ addBtn.addEventListener('click', (e)=>{
         id: Date.now()
     };
     arrayTasks = [...arrayTasks,taskObj];
-
     if (arrayTasks.length > 0) {
         const li = document.createElement('li');
         listTasks.appendChild(li);
