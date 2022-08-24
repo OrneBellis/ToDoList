@@ -5,6 +5,20 @@ const listTasks = document.querySelector(".list-tasks");
 
 let arrayTasks = [];
 
+
+document.addEventListener('DOMContentLoaded', ()=>{
+    arrayTasks = JSON.parse(localStorage.getItem("tasks")) || []
+    if (arrayTasks.length > 0) {
+        arrayTasks.forEach(task => {
+            const li = document.createElement('li');
+            listTasks.appendChild(li);
+            li.innerHTML = `${task.task} <span class="deleteButton">X</span>`;
+        });
+    }
+})
+    // listTasks.addEventListener("click", deleteTask)
+
+
 addBtn.addEventListener('click', (e)=>{
     e.preventDefault();
     if (input.value.trim() !== '' && input.value.trim() !== null) {
@@ -23,6 +37,7 @@ addBtn.addEventListener('click', (e)=>{
                 e.target.parentElement.remove();
             }
         })
+        localStorage.setItem('tasks', JSON.stringify(arrayTasks));
     }else{
         Swal.fire({
             title: 'Error!',
