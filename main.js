@@ -5,6 +5,17 @@ const listTasks = document.querySelector(".list-tasks");
 
 let arrayTasks = [];
 
+function deleteTask() {
+    listTasks.addEventListener('click', (e)=>{
+        if (e.target.classList.contains("deleteButton")) {
+            const elementId = e.target.getAttribute('task-id');
+            arrayTasks = arrayTasks.filter(task => task.id != elementId);
+            e.target.parentElement.remove();
+            localStorage.removeItem('tasks');
+            localStorage.setItem('tasks', JSON.stringify(arrayTasks));
+        }
+    })
+}
 
 document.addEventListener('DOMContentLoaded', ()=>{
     arrayTasks = JSON.parse(localStorage.getItem("tasks")) || []
@@ -12,12 +23,12 @@ document.addEventListener('DOMContentLoaded', ()=>{
         arrayTasks.forEach(task => {
             const li = document.createElement('li');
             listTasks.appendChild(li);
-            li.innerHTML = `${task.task} <span class="deleteButton">X</span>`;
+            li.innerHTML = `${task.task} <span task-id= "${task.id}" class="deleteButton">X</span>`;
         });
     }
+    deleteTask();
+    localStorage.setItem('tasks', JSON.stringify(arrayTasks));
 })
-    // listTasks.addEventListener("click", deleteTask)
-
 
 addBtn.addEventListener('click', (e)=>{
     e.preventDefault();
@@ -30,13 +41,9 @@ addBtn.addEventListener('click', (e)=>{
         if (arrayTasks.length > 0) {
             const li = document.createElement('li');
             listTasks.appendChild(li);
-            li.innerHTML = `${taskObj.task} <span class="deleteButton">X</span>`;
+            li.innerHTML = `${taskObj.task} <span task-id="${taskObj.id}" class="deleteButton">X</span>`;
         }
-        listTasks.addEventListener('click', (e)=>{
-            if (e.target.classList.contains("deleteButton")) {
-                e.target.parentElement.remove();
-            }
-        })
+        deleteTask();
         localStorage.setItem('tasks', JSON.stringify(arrayTasks));
     }else{
         Swal.fire({
@@ -50,4 +57,5 @@ addBtn.addEventListener('click', (e)=>{
 })
 removeBtn.addEventListener('click', ()=>{
     listTasks.innerHTML = '';
+    localStorage.setItem('tasks', '');
 })
